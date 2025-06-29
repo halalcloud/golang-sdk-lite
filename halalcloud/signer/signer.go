@@ -16,7 +16,7 @@ import (
 type SigningConfig struct {
 	SecretID    string
 	SecretKey   string
-	AccessKey   string
+	AccessToken string
 	RequestBody []byte // 使用[]byte以支持二进制数据
 	Method      string
 	// ContentType string
@@ -32,7 +32,7 @@ type SigningConfig struct {
 // WithTimeout 设置超时时间的选项
 
 // DefaultConfig 返回一个默认的配置，用于测试或示例
-func NewConfig(apiHost string, secretID, secretKey, accessKey string, requestBody []byte, method string, apiPath string, params map[string]string, headers map[string]string, headersToSign []string) *SigningConfig {
+func NewConfig(apiHost string, secretID, secretKey, accessToken string, requestBody []byte, method string, apiPath string, params map[string]string, headers map[string]string, headersToSign []string) *SigningConfig {
 	utcTime := time.Now().UTC()
 	//if err != nil {
 	//	return "", fmt.Errorf("解析时间戳错误: %w", err)
@@ -40,7 +40,7 @@ func NewConfig(apiHost string, secretID, secretKey, accessKey string, requestBod
 	tx := &SigningConfig{
 		SecretID:    secretID,
 		SecretKey:   secretKey,
-		AccessKey:   accessKey,
+		AccessToken: accessToken,
 		RequestBody: requestBody,
 		Method:      method,
 		// ContentType: "application/json; charset=utf-8",
@@ -245,15 +245,15 @@ func (s *Signer) createStringToSign(credentialScope, hashedCanonicalRequest stri
 }
 
 func (s *Signer) createCredentialScope(dateString string) string {
-	return fmt.Sprintf("%s/%s/%s", dateString, s.Config.AccessKey, RequestSuffix)
+	return fmt.Sprintf("%s/%s/%s", dateString, s.Config.AccessToken, RequestSuffix)
 }
 
 func (s *Signer) calculateSignature(dateString, stringToSign string) string {
 	// 派生密钥
 	secretKey := []byte(SignPrefix + s.Config.SecretKey)
 	dateKey := hmacSha256(secretKey, []byte(dateString))
-	accessKeyKey := hmacSha256(dateKey, []byte(s.Config.AccessKey))
-	signingKey := hmacSha256(accessKeyKey, []byte(RequestSuffix))
+	accessTokenKey := hmacSha256(dateKey, []byte(s.Config.AccessToken))
+	signingKey := hmacSha256(accessTokenKey, []byte(RequestSuffix))
 
 	// 计算签名
 	signature := hex.EncodeToString(hmacSha256(signingKey, []byte(stringToSign)))

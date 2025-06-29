@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/halalcloud/golang-sdk-lite/halalcloud/config"
 	"github.com/halalcloud/golang-sdk-lite/halalcloud/signer"
 )
 
@@ -18,26 +19,26 @@ type Client struct {
 	Host       string
 	HTTPClient *http.Client
 	// Signer       Signer
-	AccessKey    string
+	AccessToken  string
 	SecretID     string
 	SecretKey    string
 	TokenManager TokenManager // 令牌管理器
+	configStore  config.ConfigStore
 }
 
 // ClientOption 是一个函数类型，用于配置Client
 type ClientOption func(*Client)
 
 // NewClient 创建一个新的API客户端
-func NewClient(host string, accessKey, secretID, secretKey string, options ...ClientOption) *Client {
+func NewClient(host string, secretID, secretKey string, configStore config.ConfigStore, options ...ClientOption) *Client {
 	client := &Client{
 		Host: host,
 		HTTPClient: &http.Client{
 			Timeout: 10 * time.Second,
 		},
-		AccessKey: accessKey,
-		SecretKey: secretKey,
-		SecretID:  secretID,
-		// Signer:    &DefaultSigner{},
+		SecretKey:   secretKey,
+		SecretID:    secretID,
+		configStore: configStore,
 	}
 
 	// 应用所有选项
@@ -74,7 +75,7 @@ func (c *Client) Request(ctx context.Context, method string, path string,
 			headersToSign = append(headersToSign, "content-type")
 		}
 
-		signConfig := signer.NewConfig(c.Host, c.SecretID, c.SecretKey, c.AccessKey, bodyRaw, method, path, paramsMap, headers, headersToSign)
+		signConfig := signer.NewConfig(c.Host, c.SecretID, c.SecretKey, c.AccessToken, bodyRaw, method, path, paramsMap, headers, headersToSign)
 		signerData := signer.NewSigner(signConfig)
 		// 创建请求
 		req, err := http.NewRequestWithContext(ctx, method, signerData.GetRequestURL(true), bytes.NewReader(bodyRaw))

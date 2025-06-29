@@ -52,7 +52,7 @@ func WithTokenAuth(accessToken, refreshToken string, expiresIn int64, tokenEndpo
 			req.Header.Set("Accept", "application/json")
 
 			// 签名请求（如需要）
-			if err := c.Signer.Sign(req, c.AccessKey, c.SecretKey); err != nil {
+			if err := c.Signer.Sign(req, c.AccessToken, c.SecretKey); err != nil {
 				return nil, fmt.Errorf("failed to sign refresh token request: %w", err)
 			}
 
