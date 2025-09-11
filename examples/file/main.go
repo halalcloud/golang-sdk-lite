@@ -26,18 +26,19 @@ func main() {
 		// 初始token信息和刷新端点,
 	)
 	userFileSvc := userfile.NewUserFileService(client)
-	req := &userfile.File{
+	req := &userfile.FileListRequest{
 		// Name: "新建文件夹",
-		Path: "/0v0000/新建文件夹/1.pdf",
-		Size: "10240",
+		Parent: &userfile.File{
+			Path: "/0v0000",
+		},
 	}
 
 	jsonData, _ := json.MarshalIndent(req, "", "  ")
 	log.Println(string(jsonData))
 
-	userResp, err := userFileSvc.CreateUploadTask(context.Background(), req)
+	userResp, err := userFileSvc.List(context.Background(), req)
 	if err != nil {
-		log.Fatalf("Failed to create upload task: %v", err)
+		log.Fatalf("Failed to list user files: %v", err)
 	}
 	jsonData, _ = json.MarshalIndent(userResp, "", "  ")
 	log.Println(string(jsonData))

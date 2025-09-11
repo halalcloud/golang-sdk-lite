@@ -106,3 +106,27 @@ type UploadTask struct {
 	BlockVersion  int32  `protobuf:"varint,18,opt,name=block_version,json=blockVersion,proto3" json:"block_version,omitempty"`
 	BlockCodec    string `protobuf:"varint,19,opt,name=block_codec,json=blockCodec,proto3" json:"block_codec,omitempty"`
 }
+
+type BatchOperationResponse struct {
+	Task     string `protobuf:"bytes,1,opt,name=task,proto3" json:"task,omitempty"`
+	Status   int32  `protobuf:"varint,2,opt,name=status,proto3" json:"status,omitempty"`
+	Affected string `protobuf:"varint,3,opt,name=affected,proto3" json:"affected,omitempty"`
+	CreateTs string `protobuf:"varint,4,opt,name=create_ts,json=createTs,proto3" json:"create_ts,omitempty"`
+	Progress string `protobuf:"varint,5,opt,name=progress,proto3" json:"progress,omitempty"`
+}
+
+type BatchOperationRequest struct {
+	Source    []*File `protobuf:"bytes,1,rep,name=source,proto3" json:"source,omitempty"`
+	Dest      *File   `protobuf:"bytes,2,opt,name=dest,proto3" json:"dest,omitempty"`
+	Operation int32   `protobuf:"varint,3,opt,name=operation,proto3" json:"operation,omitempty"`
+	Flag      int32   `protobuf:"varint,4,opt,name=flag,proto3" json:"flag,omitempty"`
+}
+
+type FileDownloadAddressResponse struct {
+	Addresses      []*SliceDownloadInfo `protobuf:"bytes,1,rep,name=addresses,proto3" json:"addresses,omitempty"`
+	ExpireAt       string               `protobuf:"varint,2,opt,name=expire_at,json=expireAt,proto3" json:"expire_at,omitempty"`
+	RequestAddress string               `protobuf:"bytes,3,opt,name=request_address,json=requestAddress,proto3" json:"request_address,omitempty"`
+	Version        int32                `protobuf:"varint,4,opt,name=version,proto3" json:"version,omitempty"`
+	Encrypt        int32                `protobuf:"varint,5,opt,name=encrypt,proto3" json:"encrypt,omitempty"`
+	StoreType      string               `protobuf:"varint,6,opt,name=store_type,json=storeType,proto3" json:"store_type,omitempty"`
+}

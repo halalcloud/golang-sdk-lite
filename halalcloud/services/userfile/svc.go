@@ -72,3 +72,115 @@ func (s *UserFileService) CreateUploadTask(ctx context.Context, req *File) (*Upl
 	}
 	return data, nil
 }
+
+func (s *UserFileService) Rename(ctx context.Context, req *File) (*BatchOperationResponse, error) {
+	data := &BatchOperationResponse{}
+	err := s.client.Post(ctx, "/v6/userfile/rename", nil, req, data)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+func (s *UserFileService) Trash(ctx context.Context, req *BatchOperationRequest) (*BatchOperationResponse, error) {
+	data := &BatchOperationResponse{}
+	err := s.client.Post(ctx, "/v6/userfile/trash", nil, req, data)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+func (s *UserFileService) Move(ctx context.Context, req *BatchOperationRequest) (*BatchOperationResponse, error) {
+	data := &BatchOperationResponse{}
+	err := s.client.Post(ctx, "/v6/userfile/move", nil, req, data)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+func (s *UserFileService) Copy(ctx context.Context, req *BatchOperationRequest) (*BatchOperationResponse, error) {
+	data := &BatchOperationResponse{}
+	err := s.client.Post(ctx, "/v6/userfile/copy", nil, req, data)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+func (s *UserFileService) Delete(ctx context.Context, req *BatchOperationRequest) (*BatchOperationResponse, error) {
+	data := &BatchOperationResponse{}
+	err := s.client.Post(ctx, "/v6/userfile/delete", nil, req, data)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+func (s *UserFileService) DeleteTrash(ctx context.Context, req *BatchOperationRequest) (*BatchOperationResponse, error) {
+	data := &BatchOperationResponse{}
+	err := s.client.Post(ctx, "/v6/userfile/delete_trash", nil, req, data)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+func (s *UserFileService) Recover(ctx context.Context, req *BatchOperationRequest) (*BatchOperationResponse, error) {
+	data := &BatchOperationResponse{}
+	err := s.client.Post(ctx, "/v6/userfile/recover", nil, req, data)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+func (s *UserFileService) BatchRename(ctx context.Context, req *BatchOperationRequest) (*BatchOperationResponse, error) {
+	data := &BatchOperationResponse{}
+	err := s.client.Post(ctx, "/v6/userfile/batch_rename", nil, req, data)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+func (s *UserFileService) BatchOperation(ctx context.Context, req *BatchOperationRequest) (*BatchOperationResponse, error) {
+	data := &BatchOperationResponse{}
+	err := s.client.Post(ctx, "/v6/userfile/batch_operation", nil, req, data)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+func (s *UserFileService) ListTrash(ctx context.Context, req *FileListRequest) (*FileListResponse, error) {
+	data := &FileListResponse{}
+	err := s.client.Post(ctx, "/v6/userfile/list_trash", nil, req, data)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+func (s *UserFileService) GetDirectDownloadAddress(ctx context.Context, req *File) (*FileDownloadAddressResponse, error) {
+	data := &FileDownloadAddressResponse{}
+	err := s.client.Post(ctx, "/v6/userfile/get_direct_download_address", nil, req, data)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+/*
+
+
+	Copy(ctx context.Context, in *BatchOperationRequest, opts ...grpc.CallOption) (*BatchOperationResponse, error)
+	Delete(ctx context.Context, in *BatchOperationRequest, opts ...grpc.CallOption) (*BatchOperationResponse, error)
+	DeleteTrash(ctx context.Context, in *BatchOperationRequest, opts ...grpc.CallOption) (*BatchOperationResponse, error)
+	Recover(ctx context.Context, in *BatchOperationRequest, opts ...grpc.CallOption) (*BatchOperationResponse, error)
+	BatchRename(ctx context.Context, in *BatchOperationRequest, opts ...grpc.CallOption) (*BatchOperationResponse, error)
+	BatchOperation(ctx context.Context, in *BatchOperationRequest, opts ...grpc.CallOption) (*BatchOperationResponse, error)
+	List(ctx context.Context, in *FileListRequest, opts ...grpc.CallOption) (*FileListResponse, error)
+	ListTrash(ctx context.Context, in *FileListRequest, opts ...grpc.CallOption) (*FileListResponse, error)
+*/
