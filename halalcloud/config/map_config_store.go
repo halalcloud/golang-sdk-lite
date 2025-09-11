@@ -6,6 +6,44 @@ type MapConfigStore struct {
 	configs sync.Map
 }
 
+// GetAccessToken implements ConfigStore.
+func (m *MapConfigStore) GetAccessToken() (string, error) {
+	value, exists := m.configs.Load("access_token")
+	if !exists {
+		return "", nil // 如果不存在，返回空字符串
+	}
+	return value.(string), nil // 返回配置项的值
+}
+
+// GetRefreshToken implements ConfigStore.
+func (m *MapConfigStore) GetRefreshToken() (string, error) {
+	value, exists := m.configs.Load("refresh_token")
+	if !exists {
+		return "", nil // 如果不存在，返回空字符串
+	}
+	return value.(string), nil // 返回配置项的值
+}
+
+// SetAccessToken implements ConfigStore.
+func (m *MapConfigStore) SetAccessToken(token string) error {
+	m.configs.Store("access_token", token)
+	return nil
+}
+
+// SetRefreshToken implements ConfigStore.
+func (m *MapConfigStore) SetRefreshToken(token string) error {
+	m.configs.Store("refresh_token", token)
+	return nil
+}
+
+// SetToken implements ConfigStore.
+func (m *MapConfigStore) SetToken(accessToken string, refreshToken string, expiresIn int64) error {
+	m.configs.Store("access_token", accessToken)
+	m.configs.Store("refresh_token", refreshToken)
+	m.configs.Store("expires_in", expiresIn)
+	return nil
+}
+
 // ClearConfigs implements ConfigStore.
 func (m *MapConfigStore) ClearConfigs() error {
 	m.configs = sync.Map{} // 清空map

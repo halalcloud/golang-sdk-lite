@@ -13,6 +13,8 @@ type AuthorizeRequest struct {
 	Device              string `protobuf:"bytes,10,opt,name=device,proto3" json:"device,omitempty"`                                                       // Device information, used for device authorization
 	Mode                string `protobuf:"bytes,11,opt,name=mode,proto3" json:"mode,omitempty"`                                                           // Country code for the user
 	DebugHost           string `protobuf:"bytes,12,opt,name=debug_host,json=debugHost,proto3" json:"debug_host,omitempty"`                                // Debug host for testing purposes
+	GrantType           string `protobuf:"bytes,13,opt,name=grant_type,json=grantType,proto3" json:"grant_type,omitempty"`                                // Grant type, e.g., "authorization_code"
+	Legacy              bool   `protobuf:"varint,14,opt,name=legacy,proto3" json:"legacy,omitempty"`
 }
 
 type AuthorizeResponse struct {
@@ -32,8 +34,32 @@ type TokenRequest struct {
 type TokenResponse struct {
 	AccessToken  string `protobuf:"bytes,1,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`    // Access token
 	RefreshToken string `protobuf:"bytes,2,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"` // Refresh token
-	ExpiresIn    string `protobuf:"varint,3,opt,name=expires_in,json=expiresIn,proto3" json:"expires_in,omitempty"`         // Token expiration time in seconds
+	ExpiresIn    int32  `protobuf:"varint,3,opt,name=expires_in,json=expiresIn,proto3" json:"expires_in,omitempty"`         // Token expiration time in seconds
 	TokenType    string `protobuf:"bytes,4,opt,name=token_type,json=tokenType,proto3" json:"token_type,omitempty"`          // Type of the token, e.g., "Bearer"
 	Scope        string `protobuf:"bytes,5,opt,name=scope,proto3" json:"scope,omitempty"`                                   // Scopes granted
 	ExpiresInTs  string `protobuf:"varint,6,opt,name=expires_in_ts,json=expiresInTs,proto3" json:"expires_in_ts,omitempty"` // string identity = 6; // User identity associated with the token
+}
+
+type DeviceCodeAuthorizeResponse struct {
+	UserCode        string `protobuf:"bytes,1,opt,name=user_code,json=userCode,proto3" json:"user_code,omitempty"`                      // User code for device authorization
+	DeviceCode      string `protobuf:"bytes,2,opt,name=device_code,json=deviceCode,proto3" json:"device_code,omitempty"`                // Device code for device authorization
+	ExpiresIn       int32  `protobuf:"varint,3,opt,name=expires_in,json=expiresIn,proto3" json:"expires_in,omitempty"`                  // Expiration time of the authorization code in seconds
+	VerificationUri string `protobuf:"bytes,4,opt,name=verification_uri,json=verificationUri,proto3" json:"verification_uri,omitempty"` // Verification URI for device authorization
+	Interval        int32  `protobuf:"bytes,6,opt,name=interval,proto3" json:"interval,omitempty"`                                      // Polling interval for device authorization
+	ExpiresInTs     string `protobuf:"varint,7,opt,name=expires_in_ts,json=expiresInTs,proto3" json:"expires_in_ts,omitempty"`
+}
+
+type DeviceCodeAuthorizeState struct {
+	UserCode     string `protobuf:"bytes,1,opt,name=user_code,json=userCode,proto3" json:"user_code,omitempty"`       // User code for device authorization
+	DeviceCode   string `protobuf:"bytes,2,opt,name=device_code,json=deviceCode,proto3" json:"device_code,omitempty"` // Device code for device authorization
+	ExpiresIn    int32  `protobuf:"varint,3,opt,name=expires_in,json=expiresIn,proto3" json:"expires_in,omitempty"`   // Expiration time of the authorization code in seconds
+	Scope        string `protobuf:"bytes,4,opt,name=scope,proto3" json:"scope,omitempty"`
+	Login        bool   `protobuf:"varint,5,opt,name=login,proto3" json:"login,omitempty"`       // Indicates if the user is logged in
+	Interval     int32  `protobuf:"varint,6,opt,name=interval,proto3" json:"interval,omitempty"` // Polling interval for device authorization
+	Status       string `protobuf:"bytes,7,opt,name=status,proto3" json:"status,omitempty"`      // Status of the device authorization request
+	State        string `protobuf:"bytes,8,opt,name=state,proto3" json:"state,omitempty"`        // State parameter to match the request
+	IntervalTs   string `protobuf:"varint,9,opt,name=interval_ts,json=intervalTs,proto3" json:"interval_ts,omitempty"`
+	ExpiresInTs  string `protobuf:"varint,10,opt,name=expires_in_ts,json=expiresInTs,proto3" json:"expires_in_ts,omitempty"`
+	AccessToken  string `protobuf:"bytes,11,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`    // Access token
+	RefreshToken string `protobuf:"bytes,12,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"` // Refresh token
 }

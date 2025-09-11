@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -20,25 +21,28 @@ type Client struct {
 	HTTPClient *http.Client
 	// Signer       Signer
 	AccessToken  string
-	SecretID     string
-	SecretKey    string
-	TokenManager TokenManager // 令牌管理器
-	configStore  config.ConfigStore
+	ClientID     string
+	ClientSecret string
+	// TokenManager TokenManager // 令牌管理器
+	configStore config.ConfigStore
 }
 
 // ClientOption 是一个函数类型，用于配置Client
 type ClientOption func(*Client)
 
 // NewClient 创建一个新的API客户端
-func NewClient(host string, secretID, secretKey string, configStore config.ConfigStore, options ...ClientOption) *Client {
-	client := &Client{
-		Host: host,
-		HTTPClient: &http.Client{
+func NewClient(httpClient *http.Client, host string, secretID, secretKey string, configStore config.ConfigStore, options ...ClientOption) *Client {
+	if httpClient == nil {
+		httpClient = &http.Client{
 			Timeout: 10 * time.Second,
-		},
-		SecretKey:   secretKey,
-		SecretID:    secretID,
-		configStore: configStore,
+		}
+	}
+	client := &Client{
+		Host:         host,
+		HTTPClient:   httpClient,
+		ClientSecret: secretKey,
+		ClientID:     secretID,
+		configStore:  configStore,
 	}
 
 	// 应用所有选项
@@ -46,12 +50,17 @@ func NewClient(host string, secretID, secretKey string, configStore config.Confi
 		option(client)
 	}
 
+	token, err := configStore.GetAccessToken()
+	if err == nil && len(token) > 0 {
+		client.AccessToken = token
+	}
+
 	return client
 }
 
 // Request 发送请求并处理响应
 func (c *Client) Request(ctx context.Context, method string, path string,
-	paramsMap map[string]string, body any, result any) error {
+	paramsMap map[string]string, body any, result any, isRefreshTokenRequest bool) error {
 
 	// 尝试最多2次请求（首次请求和刷新令牌后的重试）
 	for attempt := range 2 {
@@ -75,7 +84,7 @@ func (c *Client) Request(ctx context.Context, method string, path string,
 			headersToSign = append(headersToSign, "content-type")
 		}
 
-		signConfig := signer.NewConfig(c.Host, c.SecretID, c.SecretKey, c.AccessToken, bodyRaw, method, path, paramsMap, headers, headersToSign)
+		signConfig := signer.NewConfig(c.Host, c.ClientID, c.ClientSecret, c.AccessToken, bodyRaw, method, path, paramsMap, headers, headersToSign)
 		signerData := signer.NewSigner(signConfig)
 		// 创建请求
 		req, err := http.NewRequestWithContext(ctx, method, signerData.GetRequestURL(true), bytes.NewReader(bodyRaw))
@@ -88,15 +97,6 @@ func (c *Client) Request(ctx context.Context, method string, path string,
 		}
 
 		// 设置请求头
-
-		// 如果有令牌管理器且不是认证端点，添加访问令牌
-		if c.TokenManager != nil && !isAuthEndpoint(path) {
-			token, err := c.TokenManager.GetToken()
-			if err != nil {
-				return NewAPIError("token_error", err.Error(), 0)
-			}
-			req.Header.Set("Authorization", "Bearer "+token)
-		}
 
 		// 签名请求
 
@@ -114,9 +114,9 @@ func (c *Client) Request(ctx context.Context, method string, path string,
 		}
 
 		// 检查是否是认证错误（通常是401 Unauthorized）
-		if resp.StatusCode == http.StatusUnauthorized && attempt == 0 && c.TokenManager != nil {
+		if resp.StatusCode == http.StatusUnauthorized && attempt == 0 && !c.isUseClientToken() && !isAuthEndpoint(path) && !isRefreshTokenRequest {
 			// 尝试刷新令牌
-			_, err := c.TokenManager.RefreshToken()
+			err := c.RefreshToken(ctx)
 			if err != nil {
 				// 如果刷新失败，返回原始错误
 				apiErr := APIError{}
@@ -170,20 +170,66 @@ func isAuthEndpoint(path string) bool {
 
 // Get 发送GET请求
 func (c *Client) Get(ctx context.Context, path string, params map[string]string, result any) error {
-	return c.Request(ctx, http.MethodGet, path, params, nil, result)
+	return c.Request(ctx, http.MethodGet, path, params, nil, result, false)
 }
 
 // Post 发送POST请求
 func (c *Client) Post(ctx context.Context, path string, params map[string]string, body any, result any) error {
-	return c.Request(ctx, http.MethodPost, path, params, body, result)
+	return c.Request(ctx, http.MethodPost, path, params, body, result, false)
 }
 
 // Put 发送PUT请求
 func (c *Client) Put(ctx context.Context, path string, params map[string]string, body any, result any) error {
-	return c.Request(ctx, http.MethodPut, path, params, body, result)
+	return c.Request(ctx, http.MethodPut, path, params, body, result, false)
 }
 
 // Delete 发送DELETE请求
 func (c *Client) Delete(ctx context.Context, path string, params map[string]string, result any) error {
-	return c.Request(ctx, http.MethodDelete, path, params, nil, result)
+	return c.Request(ctx, http.MethodDelete, path, params, nil, result, false)
+}
+
+func (c *Client) isUseClientToken() bool {
+	return false
+}
+
+func (c *Client) SetToken(accessToken, refreshToken string, expiresIn int32) {
+	c.AccessToken = accessToken
+
+	err := c.configStore.SetToken(accessToken, refreshToken, int64(expiresIn))
+	if err != nil {
+		log.Printf("Failed to store token: %v", err)
+	}
+	// 这里可以设置过期时间戳，如果需要的话
+}
+
+func (c *Client) RefreshToken(ctx context.Context) error {
+	// c.AccessToken = token
+
+	refreshToken, err := c.configStore.GetRefreshToken()
+	if err != nil {
+		return fmt.Errorf("failed to get refresh token: %w", err)
+	}
+	if refreshToken == "" {
+		return fmt.Errorf("refresh token is empty")
+	}
+	log.Printf("Refreshing token for old [%s]...", refreshToken)
+	res := &TokenResponse{}
+	err = c.Request(ctx, http.MethodPost, "/v6/oauth/refresh_token", nil, map[string]string{
+		"refresh_token": refreshToken,
+		"grant_type":    "refresh_token",
+		"client_id":     c.ClientID,
+	}, res, true)
+	if err != nil {
+		log.Printf("Error refreshing token: %v", err)
+		return fmt.Errorf("failed to refresh token: %w", err)
+	}
+	c.AccessToken = res.AccessToken
+	err = c.configStore.SetToken(res.AccessToken, res.RefreshToken, int64(res.ExpiresIn))
+	if err != nil {
+		return fmt.Errorf("failed to store refreshed token: %w", err)
+	}
+	log.Printf("Token refreshed successfully: Access Token: %s, Refresh Token: %s, Expires In: %d seconds",
+		res.AccessToken, res.RefreshToken, res.ExpiresIn)
+
+	return nil
 }

@@ -11,4 +11,12 @@ type ConfigStore interface {
 	ListConfigs() (map[string]string, error)
 	// ClearConfigs clears all configurations.
 	ClearConfigs() error
+
+	GetRefreshToken() (string, error)
+	SetRefreshToken(token string) error
+
+	SetAccessToken(token string) error
+	GetAccessToken() (string, error)
+
+	SetToken(accessToken, refreshToken string, expiresIn int64) error
 }

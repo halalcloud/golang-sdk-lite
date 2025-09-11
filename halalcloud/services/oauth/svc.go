@@ -60,3 +60,21 @@ func (s *OAuthService) GetToken(ctx context.Context, req *TokenRequest) (*TokenR
 	}
 	return data, nil
 }
+
+func (s *OAuthService) DeviceCodeAuthorize(ctx context.Context, req *AuthorizeRequest) (*DeviceCodeAuthorizeResponse, error) {
+	data := &DeviceCodeAuthorizeResponse{}
+	err := s.client.Post(ctx, "/v6/oauth/device_code", nil, req, data)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+func (s *OAuthService) GetDeviceCodeState(ctx context.Context, req *DeviceCodeAuthorizeState) (*DeviceCodeAuthorizeState, error) {
+	data := &DeviceCodeAuthorizeState{}
+	err := s.client.Post(ctx, "/v6/oauth/get_device_code_state", nil, req, data)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
