@@ -123,10 +123,28 @@ type BatchOperationRequest struct {
 }
 
 type FileDownloadAddressResponse struct {
-	Addresses      []*SliceDownloadInfo `protobuf:"bytes,1,rep,name=addresses,proto3" json:"addresses,omitempty"`
-	ExpireAt       string               `protobuf:"varint,2,opt,name=expire_at,json=expireAt,proto3" json:"expire_at,omitempty"`
-	RequestAddress string               `protobuf:"bytes,3,opt,name=request_address,json=requestAddress,proto3" json:"request_address,omitempty"`
-	Version        int32                `protobuf:"varint,4,opt,name=version,proto3" json:"version,omitempty"`
-	Encrypt        int32                `protobuf:"varint,5,opt,name=encrypt,proto3" json:"encrypt,omitempty"`
-	StoreType      string               `protobuf:"varint,6,opt,name=store_type,json=storeType,proto3" json:"store_type,omitempty"`
+	DownloadAddress string `protobuf:"bytes,1,opt,name=download_address,json=downloadAddress,proto3" json:"download_address,omitempty"`
+	ExpireAt        string `protobuf:"varint,2,opt,name=expire_at,json=expireAt,proto3" json:"expire_at,omitempty"`
+	RequestAddress  string `protobuf:"bytes,3,opt,name=request_address,json=requestAddress,proto3" json:"request_address,omitempty"`
+	Version         int32  `protobuf:"varint,4,opt,name=version,proto3" json:"version,omitempty"`
+	Encrypt         int32  `protobuf:"varint,5,opt,name=encrypt,proto3" json:"encrypt,omitempty"`
+	StoreType       string `protobuf:"varint,6,opt,name=store_type,json=storeType,proto3" json:"store_type,omitempty"`
+	FileSize        string `protobuf:"varint,7,opt,name=file_size,json=fileSize,proto3" json:"file_size,omitempty"`
+	Path            string `protobuf:"bytes,8,opt,name=path,proto3" json:"path,omitempty"`
+	Name            string `protobuf:"bytes,9,opt,name=name,proto3" json:"name,omitempty"`
+	ContentIdentity string `protobuf:"bytes,10,opt,name=content_identity,json=contentIdentity,proto3" json:"content_identity,omitempty"`
+}
+
+type DirectDownloadRequest struct {
+	Identity    string   `protobuf:"bytes,1,opt,name=identity,proto3" json:"identity,omitempty"`
+	Version     int32    `protobuf:"varint,2,opt,name=version,proto3" json:"version,omitempty"`
+	Path        string   `protobuf:"bytes,3,opt,name=path,proto3" json:"path,omitempty"`
+	Flag        string   `protobuf:"varint,4,opt,name=flag,proto3" json:"flag,omitempty"`
+	ClientIp    string   `protobuf:"bytes,5,opt,name=client_ip,json=clientIp,proto3" json:"client_ip,omitempty"`
+	ClientUa    string   `protobuf:"bytes,6,opt,name=client_ua,json=clientUa,proto3" json:"client_ua,omitempty"`
+	VideoCodecs []string `protobuf:"bytes,7,rep,name=video_codecs,json=videoCodecs,proto3" json:"video_codecs,omitempty"`
+	AudioCodecs []string `protobuf:"bytes,8,rep,name=audio_codecs,json=audioCodecs,proto3" json:"audio_codecs,omitempty"`
+	Expire      string   `protobuf:"varint,9,opt,name=expire,proto3" json:"expire,omitempty"`
+	Encrypt     int32    `protobuf:"varint,10,opt,name=encrypt,proto3" json:"encrypt,omitempty"`
+	Addon       string   `protobuf:"bytes,11,opt,name=addon,proto3" json:"addon,omitempty"`
 }

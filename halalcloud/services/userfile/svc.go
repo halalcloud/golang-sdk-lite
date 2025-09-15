@@ -163,7 +163,7 @@ func (s *UserFileService) ListTrash(ctx context.Context, req *FileListRequest) (
 	return data, nil
 }
 
-func (s *UserFileService) GetDirectDownloadAddress(ctx context.Context, req *File) (*FileDownloadAddressResponse, error) {
+func (s *UserFileService) GetDirectDownloadAddress(ctx context.Context, req *DirectDownloadRequest) (*FileDownloadAddressResponse, error) {
 	data := &FileDownloadAddressResponse{}
 	err := s.client.Post(ctx, "/v6/userfile/get_direct_download_address", nil, req, data)
 	if err != nil {
@@ -171,16 +171,3 @@ func (s *UserFileService) GetDirectDownloadAddress(ctx context.Context, req *Fil
 	}
 	return data, nil
 }
-
-/*
-
-
-	Copy(ctx context.Context, in *BatchOperationRequest, opts ...grpc.CallOption) (*BatchOperationResponse, error)
-	Delete(ctx context.Context, in *BatchOperationRequest, opts ...grpc.CallOption) (*BatchOperationResponse, error)
-	DeleteTrash(ctx context.Context, in *BatchOperationRequest, opts ...grpc.CallOption) (*BatchOperationResponse, error)
-	Recover(ctx context.Context, in *BatchOperationRequest, opts ...grpc.CallOption) (*BatchOperationResponse, error)
-	BatchRename(ctx context.Context, in *BatchOperationRequest, opts ...grpc.CallOption) (*BatchOperationResponse, error)
-	BatchOperation(ctx context.Context, in *BatchOperationRequest, opts ...grpc.CallOption) (*BatchOperationResponse, error)
-	List(ctx context.Context, in *FileListRequest, opts ...grpc.CallOption) (*FileListResponse, error)
-	ListTrash(ctx context.Context, in *FileListRequest, opts ...grpc.CallOption) (*FileListResponse, error)
-*/
