@@ -32,12 +32,12 @@ type TokenRequest struct {
 }
 
 type TokenResponse struct {
-	AccessToken  string `protobuf:"bytes,1,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`    // Access token
-	RefreshToken string `protobuf:"bytes,2,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"` // Refresh token
-	ExpiresIn    int32  `protobuf:"varint,3,opt,name=expires_in,json=expiresIn,proto3" json:"expires_in,omitempty"`         // Token expiration time in seconds
-	TokenType    string `protobuf:"bytes,4,opt,name=token_type,json=tokenType,proto3" json:"token_type,omitempty"`          // Type of the token, e.g., "Bearer"
-	Scope        string `protobuf:"bytes,5,opt,name=scope,proto3" json:"scope,omitempty"`                                   // Scopes granted
-	ExpiresInTs  string `protobuf:"varint,6,opt,name=expires_in_ts,json=expiresInTs,proto3" json:"expires_in_ts,omitempty"` // string identity = 6; // User identity associated with the token
+	AccessToken  string `protobuf:"bytes,1,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`           // Access token
+	RefreshToken string `protobuf:"bytes,2,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`        // Refresh token
+	ExpiresIn    int32  `protobuf:"varint,3,opt,name=expires_in,json=expiresIn,proto3" json:"expires_in,omitempty"`                // Token expiration time in seconds
+	TokenType    string `protobuf:"bytes,4,opt,name=token_type,json=tokenType,proto3" json:"token_type,omitempty"`                 // Type of the token, e.g., "Bearer"
+	Scope        string `protobuf:"bytes,5,opt,name=scope,proto3" json:"scope,omitempty"`                                          // Scopes granted
+	ExpiresInTs  int64  `protobuf:"varint,6,opt,name=expires_in_ts,json=expiresInTs,proto3" json:"expires_in_ts,omitempty,string"` // string identity = 6; // User identity associated with the token
 }
 
 type DeviceCodeAuthorizeResponse struct {
@@ -46,7 +46,7 @@ type DeviceCodeAuthorizeResponse struct {
 	ExpiresIn       int32  `protobuf:"varint,3,opt,name=expires_in,json=expiresIn,proto3" json:"expires_in,omitempty"`                  // Expiration time of the authorization code in seconds
 	VerificationUri string `protobuf:"bytes,4,opt,name=verification_uri,json=verificationUri,proto3" json:"verification_uri,omitempty"` // Verification URI for device authorization
 	Interval        int32  `protobuf:"bytes,6,opt,name=interval,proto3" json:"interval,omitempty"`                                      // Polling interval for device authorization
-	ExpiresInTs     string `protobuf:"varint,7,opt,name=expires_in_ts,json=expiresInTs,proto3" json:"expires_in_ts,omitempty"`
+	ExpiresInTs     int64  `protobuf:"varint,7,opt,name=expires_in_ts,json=expiresInTs,proto3" json:"expires_in_ts,omitempty,string"`
 }
 
 type DeviceCodeAuthorizeState struct {
@@ -58,8 +58,8 @@ type DeviceCodeAuthorizeState struct {
 	Interval     int32  `protobuf:"varint,6,opt,name=interval,proto3" json:"interval,omitempty"` // Polling interval for device authorization
 	Status       string `protobuf:"bytes,7,opt,name=status,proto3" json:"status,omitempty"`      // Status of the device authorization request
 	State        string `protobuf:"bytes,8,opt,name=state,proto3" json:"state,omitempty"`        // State parameter to match the request
-	IntervalTs   string `protobuf:"varint,9,opt,name=interval_ts,json=intervalTs,proto3" json:"interval_ts,omitempty"`
-	ExpiresInTs  string `protobuf:"varint,10,opt,name=expires_in_ts,json=expiresInTs,proto3" json:"expires_in_ts,omitempty"`
+	IntervalTs   int64  `protobuf:"varint,9,opt,name=interval_ts,json=intervalTs,proto3" json:"interval_ts,omitempty,string"`
+	ExpiresInTs  int64  `protobuf:"varint,10,opt,name=expires_in_ts,json=expiresInTs,proto3" json:"expires_in_ts,omitempty,string"`
 	AccessToken  string `protobuf:"bytes,11,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`    // Access token
 	RefreshToken string `protobuf:"bytes,12,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"` // Refresh token
 }

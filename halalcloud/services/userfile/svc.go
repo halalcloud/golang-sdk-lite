@@ -171,3 +171,13 @@ func (s *UserFileService) GetDirectDownloadAddress(ctx context.Context, req *Dir
 	}
 	return data, nil
 }
+
+// rpc Create (File) returns (File) {
+func (s *UserFileService) CreateTemporaryUpload(ctx context.Context, req *File) (*UploadTask, error) {
+	data := &UploadTask{}
+	err := s.client.Post(ctx, "/v6/userfile/create_temporary_upload", nil, req, data)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}

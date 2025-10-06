@@ -8,11 +8,11 @@ type File struct {
 	Name            string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
 	Path            string `protobuf:"bytes,5,opt,name=path,proto3" json:"path,omitempty"`
 	MimeType        string `protobuf:"bytes,6,opt,name=mime_type,json=mimeType,proto3" json:"mime_type,omitempty"`
-	Size            string `protobuf:"varint,7,opt,name=size,proto3" json:"size,omitempty"`
-	Type            string `protobuf:"varint,8,opt,name=type,proto3" json:"type,omitempty"`
-	CreateTs        string `protobuf:"varint,9,opt,name=create_ts,json=createTs,proto3" json:"create_ts,omitempty"`
-	UpdateTs        string `protobuf:"varint,10,opt,name=update_ts,json=updateTs,proto3" json:"update_ts,omitempty"`
-	DeleteTs        string `protobuf:"varint,11,opt,name=delete_ts,json=deleteTs,proto3" json:"delete_ts,omitempty"`
+	Size            int64  `protobuf:"varint,7,opt,name=size,proto3" json:"size,omitempty,string"`
+	Type            int64  `protobuf:"varint,8,opt,name=type,proto3" json:"type,omitempty,string"`
+	CreateTs        int64  `protobuf:"varint,9,opt,name=create_ts,json=createTs,proto3" json:"create_ts,omitempty,string"`
+	UpdateTs        int64  `protobuf:"varint,10,opt,name=update_ts,json=updateTs,proto3" json:"update_ts,omitempty,string"`
+	DeleteTs        int64  `protobuf:"varint,11,opt,name=delete_ts,json=deleteTs,proto3" json:"delete_ts,omitempty,string"`
 	Deleted         bool   `protobuf:"varint,12,opt,name=deleted,proto3" json:"deleted,omitempty"`
 	Dir             bool   `protobuf:"varint,13,opt,name=dir,proto3" json:"dir,omitempty"`
 	Hidden          bool   `protobuf:"varint,14,opt,name=hidden,proto3" json:"hidden,omitempty"`
@@ -20,18 +20,18 @@ type File struct {
 	Shared          bool   `protobuf:"varint,16,opt,name=shared,proto3" json:"shared,omitempty"`
 	Starred         bool   `protobuf:"varint,17,opt,name=starred,proto3" json:"starred,omitempty"`
 	Trashed         bool   `protobuf:"varint,18,opt,name=trashed,proto3" json:"trashed,omitempty"`
-	LockedAt        string `protobuf:"varint,19,opt,name=locked_at,json=lockedAt,proto3" json:"locked_at,omitempty"`
+	LockedAt        int64  `protobuf:"varint,19,opt,name=locked_at,json=lockedAt,proto3" json:"locked_at,omitempty,string"`
 	LockedBy        string `protobuf:"bytes,20,opt,name=locked_by,json=lockedBy,proto3" json:"locked_by,omitempty"`
-	SharedAt        string `protobuf:"varint,21,opt,name=shared_at,json=sharedAt,proto3" json:"shared_at,omitempty"`
-	Flag            string `protobuf:"varint,22,opt,name=flag,proto3" json:"flag,omitempty"`
+	SharedAt        int64  `protobuf:"varint,21,opt,name=shared_at,json=sharedAt,proto3" json:"shared_at,omitempty,string"`
+	Flag            int64  `protobuf:"varint,22,opt,name=flag,proto3" json:"flag,omitempty,string"`
 	Unique          string `protobuf:"bytes,23,opt,name=unique,proto3" json:"unique,omitempty"`
 	ContentIdentity string `protobuf:"bytes,24,opt,name=content_identity,json=contentIdentity,proto3" json:"content_identity,omitempty"`
-	Label           string `protobuf:"varint,25,opt,name=label,proto3" json:"label,omitempty"`
-	StoreType       string `protobuf:"varint,26,opt,name=store_type,json=storeType,proto3" json:"store_type,omitempty"`
-	Version         string `protobuf:"varint,27,opt,name=version,proto3" json:"version,omitempty"`
-	Files           string `protobuf:"varint,28,opt,name=files,proto3" json:"files,omitempty"`
-	Direcotries     string `protobuf:"varint,29,opt,name=direcotries,proto3" json:"direcotries,omitempty"`
-	Nodes           string `protobuf:"varint,30,opt,name=nodes,proto3" json:"nodes,omitempty"`
+	Label           int64  `protobuf:"varint,25,opt,name=label,proto3" json:"label,omitempty,string"`
+	StoreType       string `protobuf:"bytes,26,opt,name=store_type,json=storeType,proto3" json:"store_type,omitempty"`
+	Version         string `protobuf:"bytes,27,opt,name=version,proto3" json:"version,omitempty"`
+	Files           int64  `protobuf:"varint,28,opt,name=files,proto3" json:"files,omitempty,string"`
+	Direcotries     int64  `protobuf:"varint,29,opt,name=direcotries,proto3" json:"direcotries,omitempty,string"`
+	Nodes           int64  `protobuf:"varint,30,opt,name=nodes,proto3" json:"nodes,omitempty,string"`
 	SortName        string `protobuf:"bytes,31,opt,name=sort_name,json=sortName,proto3" json:"sort_name,omitempty"`
 }
 
@@ -61,9 +61,9 @@ type ParseFileSliceResponse struct {
 }
 
 type SliceSize struct {
-	StartIndex string `protobuf:"varint,1,opt,name=start_index,json=startIndex,proto3" json:"start_index,omitempty"`
-	EndIndex   string `protobuf:"varint,2,opt,name=end_index,json=endIndex,proto3" json:"end_index,omitempty"`
-	Size       string `protobuf:"varint,3,opt,name=size,proto3" json:"size,omitempty"`
+	StartIndex int64 `protobuf:"varint,1,opt,name=start_index,json=startIndex,proto3" json:"start_index,omitempty,string"`
+	EndIndex   int64 `protobuf:"varint,2,opt,name=end_index,json=endIndex,proto3" json:"end_index,omitempty,string"`
+	Size       int64 `protobuf:"varint,3,opt,name=size,proto3" json:"size,omitempty,string"`
 }
 
 type SliceDownloadInfo struct {
@@ -71,14 +71,14 @@ type SliceDownloadInfo struct {
 	DownloadAddress string `protobuf:"bytes,2,opt,name=download_address,json=downloadAddress,proto3" json:"download_address,omitempty"`
 	DownloadToken   string `protobuf:"bytes,3,opt,name=download_token,json=downloadToken,proto3" json:"download_token,omitempty"`
 	Encrypt         int32  `protobuf:"varint,4,opt,name=encrypt,proto3" json:"encrypt,omitempty"`
-	StoreType       string `protobuf:"varint,5,opt,name=store_type,json=storeType,proto3" json:"store_type,omitempty"`
+	StoreType       int64  `protobuf:"varint,5,opt,name=store_type,json=storeType,proto3" json:"store_type,omitempty,string"`
 }
 
 type SliceDownloadAddressRequest struct {
 	Identity []string `protobuf:"bytes,1,rep,name=identity,proto3" json:"identity,omitempty"`
 	Version  int32    `protobuf:"varint,2,opt,name=version,proto3" json:"version,omitempty"`
 	Filename string   `protobuf:"bytes,3,opt,name=filename,proto3" json:"filename,omitempty"`
-	Flag     string   `protobuf:"varint,4,opt,name=flag,proto3" json:"flag,omitempty"`
+	Flag     int64    `protobuf:"varint,4,opt,name=flag,proto3" json:"flag,omitempty,string"`
 	Parse    bool     `protobuf:"varint,5,opt,name=parse,proto3" json:"parse,omitempty"`
 }
 
@@ -101,18 +101,18 @@ type UploadTask struct {
 	Region        string `protobuf:"bytes,13,opt,name=region,proto3" json:"region,omitempty"`
 	Endpoint      string `protobuf:"bytes,14,opt,name=endpoint,proto3" json:"endpoint,omitempty"`
 	Key           string `protobuf:"bytes,15,opt,name=key,proto3" json:"key,omitempty"`
-	BlockSize     string `protobuf:"varint,16,opt,name=block_size,json=blockSize,proto3" json:"block_size,omitempty"`
-	BlockHashType string `protobuf:"varint,17,opt,name=block_hash_type,json=blockHashType,proto3" json:"block_hash_type,omitempty"`
+	BlockSize     int64  `protobuf:"varint,16,opt,name=block_size,json=blockSize,proto3" json:"block_size,omitempty,string"`
+	BlockHashType int64  `protobuf:"varint,17,opt,name=block_hash_type,json=blockHashType,proto3" json:"block_hash_type,omitempty,string"`
 	BlockVersion  int32  `protobuf:"varint,18,opt,name=block_version,json=blockVersion,proto3" json:"block_version,omitempty"`
-	BlockCodec    string `protobuf:"varint,19,opt,name=block_codec,json=blockCodec,proto3" json:"block_codec,omitempty"`
+	BlockCodec    int64  `protobuf:"varint,19,opt,name=block_codec,json=blockCodec,proto3" json:"block_codec,omitempty,string"`
 }
 
 type BatchOperationResponse struct {
 	Task     string `protobuf:"bytes,1,opt,name=task,proto3" json:"task,omitempty"`
 	Status   int32  `protobuf:"varint,2,opt,name=status,proto3" json:"status,omitempty"`
-	Affected string `protobuf:"varint,3,opt,name=affected,proto3" json:"affected,omitempty"`
-	CreateTs string `protobuf:"varint,4,opt,name=create_ts,json=createTs,proto3" json:"create_ts,omitempty"`
-	Progress string `protobuf:"varint,5,opt,name=progress,proto3" json:"progress,omitempty"`
+	Affected int64  `protobuf:"varint,3,opt,name=affected,proto3" json:"affected,omitempty,string"`
+	CreateTs int64  `protobuf:"varint,4,opt,name=create_ts,json=createTs,proto3" json:"create_ts,omitempty,string"`
+	Progress int64  `protobuf:"varint,5,opt,name=progress,proto3" json:"progress,omitempty,string"`
 }
 
 type BatchOperationRequest struct {
@@ -124,12 +124,12 @@ type BatchOperationRequest struct {
 
 type FileDownloadAddressResponse struct {
 	DownloadAddress string `protobuf:"bytes,1,opt,name=download_address,json=downloadAddress,proto3" json:"download_address,omitempty"`
-	ExpireAt        string `protobuf:"varint,2,opt,name=expire_at,json=expireAt,proto3" json:"expire_at,omitempty"`
+	ExpireAt        int64  `protobuf:"varint,2,opt,name=expire_at,json=expireAt,proto3" json:"expire_at,omitempty,string"`
 	RequestAddress  string `protobuf:"bytes,3,opt,name=request_address,json=requestAddress,proto3" json:"request_address,omitempty"`
 	Version         int32  `protobuf:"varint,4,opt,name=version,proto3" json:"version,omitempty"`
 	Encrypt         int32  `protobuf:"varint,5,opt,name=encrypt,proto3" json:"encrypt,omitempty"`
-	StoreType       string `protobuf:"varint,6,opt,name=store_type,json=storeType,proto3" json:"store_type,omitempty"`
-	FileSize        string `protobuf:"varint,7,opt,name=file_size,json=fileSize,proto3" json:"file_size,omitempty"`
+	StoreType       int64  `protobuf:"varint,6,opt,name=store_type,json=storeType,proto3" json:"store_type,omitempty,string"`
+	FileSize        int64  `protobuf:"varint,7,opt,name=file_size,json=fileSize,proto3" json:"file_size,omitempty,string"`
 	Path            string `protobuf:"bytes,8,opt,name=path,proto3" json:"path,omitempty"`
 	Name            string `protobuf:"bytes,9,opt,name=name,proto3" json:"name,omitempty"`
 	ContentIdentity string `protobuf:"bytes,10,opt,name=content_identity,json=contentIdentity,proto3" json:"content_identity,omitempty"`
@@ -139,12 +139,12 @@ type DirectDownloadRequest struct {
 	Identity    string   `protobuf:"bytes,1,opt,name=identity,proto3" json:"identity,omitempty"`
 	Version     int32    `protobuf:"varint,2,opt,name=version,proto3" json:"version,omitempty"`
 	Path        string   `protobuf:"bytes,3,opt,name=path,proto3" json:"path,omitempty"`
-	Flag        string   `protobuf:"varint,4,opt,name=flag,proto3" json:"flag,omitempty"`
+	Flag        int64    `protobuf:"varint,4,opt,name=flag,proto3" json:"flag,omitempty,string"`
 	ClientIp    string   `protobuf:"bytes,5,opt,name=client_ip,json=clientIp,proto3" json:"client_ip,omitempty"`
 	ClientUa    string   `protobuf:"bytes,6,opt,name=client_ua,json=clientUa,proto3" json:"client_ua,omitempty"`
 	VideoCodecs []string `protobuf:"bytes,7,rep,name=video_codecs,json=videoCodecs,proto3" json:"video_codecs,omitempty"`
 	AudioCodecs []string `protobuf:"bytes,8,rep,name=audio_codecs,json=audioCodecs,proto3" json:"audio_codecs,omitempty"`
-	Expire      string   `protobuf:"varint,9,opt,name=expire,proto3" json:"expire,omitempty"`
+	Expire      int64    `protobuf:"varint,9,opt,name=expire,proto3" json:"expire,omitempty,string"`
 	Encrypt     int32    `protobuf:"varint,10,opt,name=encrypt,proto3" json:"encrypt,omitempty"`
 	Addon       string   `protobuf:"bytes,11,opt,name=addon,proto3" json:"addon,omitempty"`
 }
