@@ -46,6 +46,17 @@ type FileListResponse struct {
 	ListInfo *model.ScanListRequest `protobuf:"bytes,2,opt,name=list_info,json=listInfo,proto3" json:"list_info,omitempty"`
 }
 
+type SlicesDownloadInfoRequest struct {
+	File     *File                  `protobuf:"bytes,1,opt,name=file,proto3" json:"file,omitempty"`
+	ListInfo *model.ScanListRequest `protobuf:"bytes,2,opt,name=list_info,json=listInfo,proto3" json:"list_info,omitempty"`
+}
+
+type SlicesDownloadInfoResponse struct {
+	Slices   []*SliceDownloadInfo   `protobuf:"bytes,1,rep,name=slices,proto3" json:"slices,omitempty"`
+	ListInfo *model.ScanListRequest `protobuf:"bytes,2,opt,name=list_info,json=listInfo,proto3" json:"list_info,omitempty"`
+	File     *File                  `protobuf:"bytes,3,opt,name=file,proto3" json:"file,omitempty"`
+}
+
 type ParseFileSliceResponse struct {
 	ContentIdentity      string               `protobuf:"bytes,1,opt,name=content_identity,json=contentIdentity,proto3" json:"content_identity,omitempty"`
 	MetaNodes            []string             `protobuf:"bytes,2,rep,name=meta_nodes,json=metaNodes,proto3" json:"meta_nodes,omitempty"`

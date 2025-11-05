@@ -36,7 +36,9 @@ func main() {
 	jsonData, _ := json.MarshalIndent(req, "", "  ")
 	log.Println(string(jsonData))
 
-	userResp, err := userFileSvc.List(context.Background(), req)
+	userResp, err := userFileSvc.GetDirectDownloadAddress(context.Background(), &userfile.DirectDownloadRequest{
+		Path: "/0v0000/zh-cn_windows_server_2025_updated_june_2025_x64_dvd_e743555f.iso",
+	})
 	if err != nil {
 		log.Fatalf("Failed to list user files: %v", err)
 	}

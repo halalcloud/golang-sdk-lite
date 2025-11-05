@@ -25,6 +25,15 @@ func (s *UserFileService) List(ctx context.Context, req *FileListRequest) (*File
 	return data, nil
 }
 
+func (s *UserFileService) GetFileSlicesDownloadInfo(ctx context.Context, req *SlicesDownloadInfoRequest) (*SlicesDownloadInfoResponse, error) {
+	data := &SlicesDownloadInfoResponse{}
+	err := s.client.Post(ctx, "/v6/userfile/get_file_slices_download_info", nil, req, data)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
 func (s *UserFileService) Get(ctx context.Context, req *File) (*File, error) {
 	data := &File{}
 	err := s.client.Post(ctx, "/v6/userfile/get", nil, req, data)
