@@ -41,6 +41,12 @@ type FileListRequest struct {
 	ListInfo *model.ScanListRequest `protobuf:"bytes,3,opt,name=list_info,json=listInfo,proto3" json:"list_info,omitempty"`
 }
 
+type ListRecentUpdatedFilesRequest struct {
+	Parent   *File                  `protobuf:"bytes,1,opt,name=parent,proto3" json:"parent,omitempty"`
+	StartTs  int64                  `protobuf:"varint,2,opt,name=start_ts,json=startTs,proto3" json:"start_ts,omitempty,string"`
+	ListInfo *model.ScanListRequest `protobuf:"bytes,3,opt,name=list_info,json=listInfo,proto3" json:"list_info,omitempty"`
+}
+
 type FileListResponse struct {
 	Files    []*File                `protobuf:"bytes,1,rep,name=files,proto3" json:"files,omitempty"`
 	ListInfo *model.ScanListRequest `protobuf:"bytes,2,opt,name=list_info,json=listInfo,proto3" json:"list_info,omitempty"`

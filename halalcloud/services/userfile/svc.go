@@ -190,3 +190,13 @@ func (s *UserFileService) CreateTemporaryUpload(ctx context.Context, req *File) 
 	}
 	return data, nil
 }
+
+// /v6/userfile/list_recent_updated_files
+func (s *UserFileService) ListRecentUpdatedFiles(ctx context.Context, req *ListRecentUpdatedFilesRequest) (*FileListResponse, error) {
+	data := &FileListResponse{}
+	err := s.client.Post(ctx, "/v6/userfile/list_recent_updated_files", nil, req, data)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}

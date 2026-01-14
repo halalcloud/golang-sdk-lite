@@ -26,19 +26,17 @@ func main() {
 		// 初始token信息和刷新端点,
 	)
 	userFileSvc := userfile.NewUserFileService(client)
-	req := &userfile.FileListRequest{
-		// Name: "新建文件夹",
+	req := &userfile.ListRecentUpdatedFilesRequest{
 		Parent: &userfile.File{
-			Path: "/0v0000",
+			Path: "/",
 		},
+		StartTs: time.Now().Add(-7 * 24 * time.Hour).Unix(), // 最近7天更新的文件
 	}
 
 	jsonData, _ := json.MarshalIndent(req, "", "  ")
 	log.Println(string(jsonData))
 
-	userResp, err := userFileSvc.GetDirectDownloadAddress(context.Background(), &userfile.DirectDownloadRequest{
-		Path: "/0v0000/zh-cn_windows_server_2025_updated_june_2025_x64_dvd_e743555f.iso",
-	})
+	userResp, err := userFileSvc.ListRecentUpdatedFiles(context.Background(), req)
 	if err != nil {
 		log.Fatalf("Failed to list user files: %v", err)
 	}
